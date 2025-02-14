@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Amor Gótico 🖤</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('niebla.webp') no-repeat center center/cover;
+            color: white;
+            font-family: 'UnifrakturMaguntia', cursive;
+            text-align: center;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-top: 20px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+            opacity: 0;
+            animation: fadeIn 3s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .crow {
+            position: absolute;
+            width: 100px;
+            animation: fly 6s linear infinite;
+        }
+
+        @keyframes fly {
+            0% { transform: translate(-100px, 0) scale(1); }
+            100% { transform: translate(110vw, -50vh) scale(1.2); }
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: red;
+            animation: floatHeart 4s ease-in-out infinite;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 0.7; }
+            100% { transform: translateY(-40px) scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fogCanvas"></canvas>
+    <h1>Para mi amor oscuro y eterno 🖤</h1>
+    <h1>Feliz 🖤 14 de Febrero Mi Reina</h1>
+    <p>Porque incluso en la oscuridad, eres mi luz... 🌙✨</p>
+    
+    <script>
+        const canvas = document.getElementById("fogCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.radius = Math.random() * 20 + 10;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(200, 200, 200, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateFog() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animateFog);
+        }
+
+        initParticles();
+        animateFog();
+
+        function createCrow() {
+            let crow = document.createElement("img");
+            crow.src = "cuervo.png"; // Imagen de cuervo volando
+            crow.classList.add("crow");
+            crow.style.top = Math.random() * window.innerHeight + "px";
+            document.body.appendChild(crow);
+
+            setTimeout(() => { crow.remove(); }, 6000);
+        }
+
+        function createHeart() {
+            let heart = document.createElement("div");
+            heart.innerHTML = "❤️";
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * window.innerWidth + "px";
+            heart.style.top = Math.random() * window.innerHeight + "px";
+            document.body.appendChild(heart);
+            
+            setTimeout(() => { heart.remove(); }, 4000);
+        }
+
+        document.body.addEventListener("click", createCrow);
+        setInterval(createHeart, 2000);
+    </script>
+</body>
+</html>
